@@ -27,13 +27,18 @@ if version < 0x02070000:
 parser = argparse.ArgumentParser(description = 'Create an SQLite database from a Deckbox export.', formatter_class = argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('-f', '--input-file', required = True, help = 'CSV file containing an export from Deckbox')
-parser.add_argument('-d', '--database-file', default = 'database.sqlite3', help = 'SQLite databse file.')
+parser.add_argument('-d', '--database-file', help = 'SQLite databse file.')
 parser.add_argument('--log-level', default = 'INFO', help = 'set the log level to increase or decrease verbosity')
 
 args = parser.parse_args()
 
 in_file = args.input_file
-db_file = args.database_file
+
+if args.database_file:
+    db_file = args.database_file
+else:
+    db_file = in_file + ".sqlite"
+
 log_level = args.log_level
 
 # setup logging
