@@ -12,8 +12,7 @@ import os
 
 
 # config
-integer_keys = ('count', 'tradelistcount', 'cardnumber')
-real_keys = ('myprice', 'price')
+integer_keys = ('count', 'tradelistcount', 'cardnumber', 'myprice', 'price')
 
 
 # check version
@@ -78,9 +77,6 @@ for h in headers:
 for key in integer_keys:
     types[key] = 'int'
 
-for key in real_keys:
-    types[key] = 'real'
-
 logging.debug('keys: ' + ','.join(keys))
 
 
@@ -98,13 +94,8 @@ with open(in_file, 'r') as ifp:
             # transforms
             for integer_key in integer_keys:
                 s = row[integer_key]
-                v = re.sub('[^0-9\.]', '', s)
+                v = re.sub('[^0-9]', '', s)
                 row[integer_key] = v
-
-            for real_key in real_keys:
-                s = row[real_key]
-                v = re.sub('[^0-9\.]', '', s)
-                row[real_key] = v
 
             logging.debug('row: ' + ','.join(row.values()))
             contents.append(row)
@@ -114,9 +105,9 @@ with open(in_file, 'r') as ifp:
 create = 'CREATE TABLE IF NOT EXISTS cards ('
 insert = 'INSERT INTO cards VALUES ('
 for key in keys:
-    create = create + key + ' ' + types[key] + ', ' 
+    create = create + key + ' ' + types[key] + ',' 
     insert = insert + '?,'
-create = create + ' created_at int, updated_at int)'
+create = create + 'created_at int,updated_at int)'
 insert = insert + '?,?)'
 
 logging.debug('create statement: ' + create)
