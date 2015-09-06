@@ -8,6 +8,7 @@ import sqlite3
 import time
 import logging
 import re
+import os
 
 
 # config
@@ -35,10 +36,18 @@ in_file = args.input_file
 db_file = args.database_file
 log_level = args.log_level
 
-
 # setup logging
 logging.basicConfig(format = '%(asctime)s %(levelname)s: %(message)s', level = getattr(logging, log_level.upper()), datefmt = '%Y/%m/%d %H:%M:%S')
 
+
+# check args
+if not os.path.isfile(in_file):
+    logging.critical('input file does not exist')
+    sys.exit(-1)
+
+if os.path.isfile(db_file):
+    logging.critical('database file already exists')
+    sys.exit(-1)
 
 
 # read the file to get the column headers
